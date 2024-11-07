@@ -33,7 +33,6 @@ export function PaymentTable({refreshPayments,setRefreshPayments}:Props) {
   const [error, setError] = useState<any>(null);
 
 
-
   // useEffect(() => {
   //   const getPayments = async () => {
   //     setIsLoading(true);
@@ -58,10 +57,6 @@ export function PaymentTable({refreshPayments,setRefreshPayments}:Props) {
 
   //   getPayments();
   // }, [!refreshPayments]);
-
-
-
-
 
 
 

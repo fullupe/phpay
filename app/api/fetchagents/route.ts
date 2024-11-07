@@ -5,7 +5,6 @@
 const URL:string = process.env.NEXT_PUBLIC_BASE_URL_DATA as string
 
 
-
 // export async function GET(req: Request, res: Response){
 
 //     try{
