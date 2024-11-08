@@ -40,19 +40,18 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
   
       agentsData?.forEach(agent => {
         // Assuming you want to format AgentId as a 4-digit string
-        const formattedAgentId = `${agent.AgentId.toString().padStart(3, '0')}`;
-        agentsDatabase[formattedAgentId] = agent.AgentName;
+        const formattedAgentName = agent.AgentName.toLocaleLowerCase();
+        agentsDatabase[formattedAgentName] = agent.AgentId;
       });
   
 
-  //console.log(agentsDatabase)
 
-  const handleAgentCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const code = e.target.value;
+  const handleAgentNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
     setFormData(prev => ({
       ...prev,
-      agentCode: code,
-      agentName: agentsDatabase[code as keyof typeof agentsDatabase] || "",
+      agentName: name,
+      agentCode: agentsDatabase[name as keyof typeof agentsDatabase] || "",
     }));
   };
 
@@ -86,61 +85,6 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
 
       return;
     }
-
-
-
-
-    // try {
-    //   const response = await fetch(`${apiUrl}?action=addNewRecordsPay`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       AgentsId: formData.agentCode,
-    //       Date: new Date(),
-    //       Amount: formData.amount,
-    //     }),
-    //   });
-    
-    //   if (!response.ok) {
-    //     throw new Error('Network response was not ok');
-    //   }
-    
-    //   const data = await response.json();
-    //   setRefreshPayments(!refreshPayments);
-    
-    //   toast({
-    //     title: "Success",
-    //     description: `Payment submitted successfully!`,
-    //   });
-    
-    //   setFormData({
-    //     agentCode: "",
-    //     agentName: "",
-    //     amount: "",
-    //   });
-    // } catch (error) {
-    //   console.error('Error:', error);
-    //   toast({
-    //     title: "Error",
-    //     description: `Failed to submit payment. Please try again.`,
-    //   });
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -195,30 +139,6 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
 
 
 
-  // useEffect(() => {
-  //   const getPayments = async () => {
-  //     setIsLoading(true);
-  //     setError(null); // Reset error on each fetch
-
-  //     try {
-  //       const response = await fetch('/api/fetchagents');
-
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-
-  //       const data = await response.json();
-  //       setAgentsData(data.data || []); // Handle missing "data" property
-  //     } catch (error) {
-  //       console.error('Error fetching agents:', error);
-  //       setError(error); // Store error for display
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   getPayments();
-  // }, []);
 
   useEffect(() => {
     const getAgents = async () => {
@@ -240,6 +160,23 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
+
+
+
+   <div className="space-y-2">
+        <label htmlFor="agentName" className="text-sm font-medium text-gray-700 block">
+          Agent Name
+        </label>
+        <Input
+          id="agentName"
+          name="agentName"
+          value={formData.agentName}
+          onChange={handleAgentNameChange}
+          placeholder="Enter agent Name"
+         
+        />
+      </div>
+
       <div className="space-y-2">
         <label htmlFor="agentCode" className="text-sm font-medium text-gray-700 block">
           Agent Code
@@ -248,25 +185,14 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
           id="agentCode"
           name="agentCode"
           value={formData.agentCode}
-          onChange={handleAgentCodeChange}
-          placeholder="Enter agent code"
+          readOnly
+          placeholder="Agent code will auto-populate"
+          className="bg-gray-50"
           required
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="agentName" className="text-sm font-medium text-gray-700 block">
-          Agent Name
-        </label>
-        <Input
-          id="agentName"
-          name="agentName"
-          value={formData.agentName}
-          readOnly
-          placeholder="Agent name will auto-populate"
-          className="bg-gray-50"
-        />
-      </div>
+      
 
       <div className="space-y-2">
         <label htmlFor="amount" className="text-sm font-medium text-gray-700 block">
@@ -285,7 +211,7 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
         />
       </div>
 
-      <Button type="submit" variant='outline' className="w-full">
+      <Button type="submit"  variant='outline' className="w-full bg-blue-200">
         Submit Payment
       </Button>
     </form>

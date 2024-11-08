@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-//const apiUrl:string = process.env.GOOGLE_SCRIPT_URL as string
+import { Skeleton } from "@/components/ui/skeleton"
+import { ProgressBar } from "react-loader-spinner";
 
-// Mock data for the table
 
 interface Tpayment{
   AgentsId:string,
@@ -33,63 +33,32 @@ export function PaymentTable({refreshPayments,setRefreshPayments}:Props) {
   const [error, setError] = useState<any>(null);
 
 
-  // useEffect(() => {
-  //   const getPayments = async () => {
-  //     setIsLoading(true);
-  //     setError(null); // Reset error on each fetch
 
-  //     try {
-  //       const response = await fetch('/api/fetchpayments');
-
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-
-  //       const data = await response.json();
-  //       setPayments(data.data || []); // Handle missing "data" property
-  //     } catch (error) {
-  //       console.error('Error fetching agents:', error);
-  //       setError(error); // Store error for display
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   getPayments();
-  // }, [!refreshPayments]);
-
-
-
-  // useEffect(()=>{
-  //   const getPayments= async ()=>{
-  //     try{
-  //         const Payments:Tpayment| any =  await fetch("/api/fetchpayments").then((res)=>res?.json().then(data=>data.data))
-
-  //         setPayments(Payments);
-          
-  //     }catch(error){
-  //         console.log(error)
-  //     }
-
-  // }
-
-  // getPayments()
-
-  // },[refreshPayments])
 
   useEffect(() => {
     const getPayments = async () => {
+      setIsLoading(true);
+      setError(null); // Reset error on each fetch
       try {
         const response = await fetch("/api/fetchpayments");
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+
         setPayments(data.data);
-        console.log(data.data);
+        //@ts-ignore
+        //const sortedPayments = data.sort((a:string, b:string) => new Date(b.Date) - new Date(a.Date));
+        
+        //setPayments(sortedPayments);
+
+        //console.log(data.data);
       } catch (error) {
         console.error("Failed to fetch payments:", error);
-      }
+        setError(error); // Store error for display
+      }finally {
+             setIsLoading(false);
+          }
     };
   
     getPayments();
@@ -98,6 +67,22 @@ export function PaymentTable({refreshPayments,setRefreshPayments}:Props) {
 
   return (
     <div className="rounded-md border">
+
+     { isLoading ? (
+       <div className="flex w-full h-[50px] items-center justify-center">
+      <ProgressBar
+      visible={true}
+      height="80"
+      width="80"
+      //@ts-ignore
+      color="#4fa94d"
+      ariaLabel="progress-bar-loading"
+      wrapperStyle={{}}
+      wrapperClass=""
+      />
+       </div>
+
+     ):(
       <ScrollArea className="h-[400px] w-full">
         <Table>
           <TableHeader className="sticky top-0 bg-white">
@@ -110,7 +95,10 @@ export function PaymentTable({refreshPayments,setRefreshPayments}:Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {payments.map((payment,i) => (
+            
+            {
+              //@ts-ignore
+            payments.sort((a, b) => new Date(b.Date) - new Date(a.Date)).map((payment,i) => (
               <TableRow key={i}>
                 <TableCell>{new Date(payment.Date).toLocaleString()}</TableCell>
                 <TableCell>{payment.AgentsId}</TableCell>
@@ -125,9 +113,11 @@ export function PaymentTable({refreshPayments,setRefreshPayments}:Props) {
                 </TableCell> */}
               </TableRow>
             ))}
+
           </TableBody>
         </Table>
       </ScrollArea>
+     ) }
     </div>
   );
 }

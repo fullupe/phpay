@@ -20,9 +20,11 @@ export default function PaymentPage() {
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4">
       <div className="max-w-4xl mx-auto pt-8">
         <div className="bg-white rounded-lg shadow-xl p-8">
-          <h1 className="text-2xl font-bold text-center mb-8 text-gray-800">
-            Payment Form
-          </h1>
+          <div className="text-2xl flex gap-2 items-center justify-center font-bold text-center mb-8 text-gray-800">
+            <p>Payment Form</p> <a className="bg-blue-200 px-2 rounded-lg " target="_blank" href="https://script.google.com/macros/s/AKfycbwZFoHH5mB7l3gSyK9w_dG8TCAzctP9EdBCMtEoYuun302Rvt-6Fwr5h8RaksFSEHxB/exec
+                            " > <p className="text-sm">Open-BD </p>
+                            </a>
+          </div>
           <PaymentForm setRefreshPayments={setRefreshPayments} refreshPayments={refreshPayments}/>
           
           <div className="mt-12">
