@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton"
+
 import { ProgressBar } from "react-loader-spinner";
 
 
@@ -47,12 +47,7 @@ export function PaymentTable({refreshPayments,setRefreshPayments}:Props) {
         const data = await response.json();
 
         setPayments(data.data);
-        //@ts-ignore
-        //const sortedPayments = data.sort((a:string, b:string) => new Date(b.Date) - new Date(a.Date));
-        
-        //setPayments(sortedPayments);
-
-        //console.log(data.data);
+       
       } catch (error) {
         console.error("Failed to fetch payments:", error);
         setError(error); // Store error for display

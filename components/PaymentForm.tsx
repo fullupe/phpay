@@ -39,7 +39,7 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
       const agentsDatabase:any = {};
   
       agentsData?.forEach(agent => {
-        // Assuming you want to format AgentId as a 4-digit string
+       
         const formattedAgentName = agent.AgentName.toLocaleLowerCase();
         agentsDatabase[formattedAgentName] = agent.AgentId;
       });
@@ -50,7 +50,7 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
     const name = e.target.value;
     setFormData(prev => ({
       ...prev,
-      agentName: name,
+      agentName: name.toLocaleLowerCase(),
       agentCode: agentsDatabase[name as keyof typeof agentsDatabase] || "",
     }));
   };
@@ -211,7 +211,7 @@ export function PaymentForm({refreshPayments,setRefreshPayments}:Props) {
         />
       </div>
 
-      <Button type="submit"  variant='outline' className="w-full bg-blue-200">
+      <Button type="submit"  variant='outline' className={`w-full ${formData.amount ? "bg-blue-400" : "bg-blue-200"}`}>
         Submit Payment
       </Button>
     </form>
